@@ -1,0 +1,24 @@
+{
+  "name": "nackademin-slutprojekt-backend",
+  "version": "1.0.0",
+  "description": "## Arbetssätt Git Flow Agilt och Trello",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zocom-david-lundholm/nackademin-slutprojekt-backend.git"
+  },
+  "keywords": [],
+  "author": "Icke-Micke",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zocom-david-lundholm/nackademin-slutprojekt-backend/issues"
+  },
+  "homepage": "https://github.com/zocom-david-lundholm/nackademin-slutprojekt-backend#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.12.9"
+  }
+}
