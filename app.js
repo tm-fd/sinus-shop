@@ -4,6 +4,9 @@ const orders = require('./routes/orders');
 const mongoose = require('mongoose');
 const app = express()
 
+
+
+const register = require('./routes/register');
 app.use( express.static('public') )
 
 
@@ -22,5 +25,5 @@ app.use(express.urlencoded({ extended: true }));
  // Routes
 app.use('/api/products', products);
 app.use('/', orders);
-
+app.use('/api/register', register);
 module.exports = app
