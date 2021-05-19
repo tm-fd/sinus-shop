@@ -1,14 +1,10 @@
-const {Router} = require('express')
+const router = require('express').Router();
 const Product = require('../model/product')
-
-const router = new Router()
-
-
 
 router.get('/', async (req,res) => {
     let products = await Product.find({})
     res.json(products)
-})
+});
 
 router.post('/', async (req,res) => {
 
@@ -22,9 +18,5 @@ router.post('/', async (req,res) => {
 
    product = await product.save()
    res.send(product)
-})
-
-
-
-
-module.exports = router;
+});
+module.exports =router;
