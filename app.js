@@ -1,28 +1,27 @@
-const express = require('express')
-const products = require('./routes/products');
-const productsController = require('./controller/productsController')
+const express = require('express');
+const productsController = require('./controller/productsController');
 const mongoose = require('mongoose');
-const app = express()
+const app = express();
 
-app.use( express.static('public') )
+require('dotenv').config();
 
 
 // connect to mongodb & listen for requests
-const dbURI = "mongodb+srv://Grin:projektgrin@grin.0ubep.mongodb.net/Grin_db?retryWrites=true&w=majority";
+const dbURI = `mongodb+srv://Grin:${process.env.PASSWORD}@grin.0ubep.mongodb.net/Grin_db?retryWrites=true&w=majority`;
 
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
-  .then(result => app.listen(3000, () => { console.log('DB connected...')}))
+  .then(result => app.listen(3000, () => { console.log('DB connected...') }))
   .catch(err => console.log(err));
 
 
 // Middleware
+app.use( express.static('public') );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
 
 
  // Routes
-app.use('/api/products', products);
-app.use('/api/productsController', productsController)
+app.use('/api/productsController', productsController);
 
 
-module.exports = app
+module.exports = app;
