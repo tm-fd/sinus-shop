@@ -8,6 +8,6 @@ const productSchema = mongoose.Schema({
     imgFile:String,
 });
 
-const Product = mongoose.model('Product', productsSchema);
+const Product = mongoose.model('Product', productSchema);
 
 module.exports = Product;
