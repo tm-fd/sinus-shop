@@ -3,7 +3,7 @@ const Product = require('../model/product');
 const router = new Router();
 
 
-
+//Show all products
 router.get('/', async (req,res) => {
 
     const products = await Product.find({})
@@ -11,6 +11,15 @@ router.get('/', async (req,res) => {
 });
 
 
+//Show product by id
+router.get('/:id', async (req,res) => {
+
+    const product = await Product.findById(req.params.id)
+    res.send(product)
+});
+
+
+//Post a new product
 router.post('/', async (req,res) => {
 
     let product = new Product({ 
@@ -26,6 +35,7 @@ router.post('/', async (req,res) => {
 });
 
 
+//Update a product based on id
 router.patch('/:patchId', async (req, res) => {
 
     const patchedProduct = await Product.findByIdAndUpdate( req.params.patchId, req.body, {
@@ -35,6 +45,7 @@ router.patch('/:patchId', async (req, res) => {
 });
 
 
+//Delete a product based on id
 router.delete('/:deleteId', (req, res) => {
 
     Product.findByIdAndRemove({_id: req.params.deleteId})
