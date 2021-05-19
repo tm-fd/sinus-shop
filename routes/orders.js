@@ -3,26 +3,30 @@ const User = require('../model/user');
 const Order = require('../model/order');
 const Product = require('../model/product');
 const mongoose = require('mongoose');
+
 const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser');
 router.use(cookieParser());
-const bcrypt = require('bcrypt');
+//const bcrypt = require('bcrypt');
 require('dotenv').config()
+/* const options = {
+    algorithm: 'HS256'
+} */
 
 router.get('/api/orders', async (req, res) => {
-    console.log(req.cookies);
+    console.log(req.cookies['auth-token']);
     if (!req.cookies['auth-token']) {
-        res.send("Bara för inloggade.")
+        res.status(204).send("No Content - Bara för inloggade")
     } else {
 
-        const token = req.cookies['auth-token']
+        const token = req.cookies['auth-token'];
         jwt.verify(token, process.env.SECRET, async (err, payload) => {
             if (err) {
                 res.json(err)
             } else {
-                const user = await User.findOne({ name: req.body.name, password: req.body.password});
+                //const user = await User.findOne({ name: req.body.name, password: req.body.password});
 
-                if (user.role === 'admin') {
+                /* if (user.role === 'admin') {
                     const orders = await Order.find();
                     console.log(JSON.stringify(orders));
                     res.json(orders);
@@ -30,24 +34,49 @@ router.get('/api/orders', async (req, res) => {
                     const user = await User.findOne({ name: req.body.name, password: req.body.password },
                         { orderHistory: 1 }).populate('orderHistory');
                     res.json(user.orderHistory);
+                } */
+
+                if (payload.role === 'admin') {
+                    const orders = await Order.find();
+                    console.log(JSON.stringify(orders));
+                    res.json(orders);
+                } else {
+                    const user = await User.findOne({ name: req.body.name, password: req.body.password },
+                        { orderHistory: 1 }).populate('orderHistory');
+                    res.json(user.orderHistory);
                 }
-            }
+            
+
+            } 
+
+
+
+
+
+
+
+
+
+
+
+
         })
     }
 });
 
 router.post('/api/orders', async (req, res) => {
     console.log(req.cookies);
+    console.log(req.cookies['auth-token']);
     if (!req.cookies['auth-token']) {
         res.send("Bara för inloggade.")
     } else {
         const token = req.cookies['auth-token']
-        jwt.verify(token, process.env.SECRET, async(err, payload) => {
+        jwt.verify(token, process.env.SECRET, /* options,  */async(err, payload) => {
             if (err) {
                 res.json(err)
             } else {
               
-                const user = await User.findOne({ name: req.body.name, password: req.body.password });
+                const user = await User.findOne({ name: req.body.name/* , password: req.body.password */ });
 
     let items = req.body.items.split(',');
     console.log(req.body.items);
