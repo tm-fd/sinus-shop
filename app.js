@@ -24,4 +24,4 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/productsController', productsController);
 
 
-module.exports = app;
+module.exports = app
