@@ -3,7 +3,7 @@ const User = require('../model/user');
 const Order = require('../model/order');
 const Product = require('../model/product');
 const mongoose = require('mongoose');
-
+const jwt = require('jsonwebtoken')
 
 const bcrypt = require('bcrypt');
 const cookieParser = require('cookie-parser');
@@ -19,7 +19,7 @@ router.get('/api/orders', async (req, res) => {
     } else {
         const user = await User.findOne({ name: req.body.name })
       
-            bcrypt.compare(req.body.password, user.password, async (err, payload) => {
+            bcrypt.compare(req.body.password, user.password, async (err, result) => {
             if (err) {
                 res.json(err)
             } else {
@@ -46,13 +46,14 @@ router.post('/api/orders', async (req, res) => {
         res.send("Bara för inloggade.")
     } else {
         const user = await User.findOne({ name: req.body.name })
-     
-        bcrypt.compare(req.body.password, user.password, async (err, payload) => {
+        const token = req.cookies['auth-token']
+       // bcrypt.compare(req.body.password, user.password, async (err, payload) => {
+        jwt.verify(token, process.env.SECRET, async(err, payload) => {
             if (err) {
                 res.json(err)
             } else {
               
-                const user = await User.findOne({ name: req.body.name , password: req.body.password  });
+                const user = await User.findOne({ name: req.body.name /* , password: req.body.password  */ });
 
     let items = req.body.items.split(',');
     console.log(req.body.items);
@@ -62,12 +63,12 @@ router.post('/api/orders', async (req, res) => {
     // Validate products
  
     const products = await Product.find({ _id: { $in: items } });
-/* 
+
     if (items.length !== products.length) {
         // meddelande
         res.status(400).send("Det är tomt här !!!!!");
         return;
-    }  */
+    }  
 
     let order = new Order({
         timeStamp: Date.now(),
