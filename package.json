@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/zocom-david-lundholm/nackademin-slutprojekt-backend#readme",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
     "dotenv": "^9.0.2",
     "express": "^4.17.1",
