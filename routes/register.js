@@ -23,8 +23,7 @@ const bcrypt = require("bcryptjs");
 
 router.post('/', (req, res) => {
     bcrypt.hash(req.body.password, 10, (err, hash) => {
-        if (err)
-        res.json(err)
+        if (err) res.json(err)
         else {
             const newUser = new User({
                 name: req.body.name,
