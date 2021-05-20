@@ -1,5 +1,7 @@
 const express = require('express')
 const products = require('./routes/products');
+const auth = require('./controller/authController')
+const register = require('./routes/register')
 const mongoose = require('mongoose');
 const app = express()
 
@@ -10,7 +12,6 @@ app.use( express.static('public') )
 const dbURI = "mongodb+srv://Grin:projektgrin@grin.0ubep.mongodb.net/Grin_db?retryWrites=true&w=majority";
 
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(result => app.listen(3000, () => { console.log('DB connected...')}))
   .catch(err => console.log(err));
 
 
@@ -21,5 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 
  // Routes
 app.use('/api/products', products);
+app.use('/api/auth', auth);
+app.use('/api/register', register);
 
 module.exports = app
