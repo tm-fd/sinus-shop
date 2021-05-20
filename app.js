@@ -2,6 +2,7 @@ const express = require('express')
 const products = require('./routes/products');
 const auth = require('./controller/authController');
 const users = require('./routes/register');
+const order = require('./routes/orders');
 const mongoose = require('mongoose');
 const app = express()
 
@@ -24,5 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/products', products);
 app.use('/api/auth', auth);
 app.use('/api/register', users);
+app.use('/', order);
+
 
 module.exports = app
