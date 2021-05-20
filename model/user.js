@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-// const Order = require('../model/order');
+const Order = require('../model/order');
 
 const userSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
@@ -12,10 +12,10 @@ const userSchema = mongoose.Schema({
         zip: Number,
         city: String,
     },
-    // orderHistory: [{
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'Order'
-    // }]
+    orderHistory: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Order'
+    }]
 });
 
 const User = mongoose.model('User', userSchema);

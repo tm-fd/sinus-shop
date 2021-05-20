@@ -12,7 +12,6 @@ const saltRounds = 10
 // app.use(express.urlencoded({ extended: true }))
 // app.use(cookieParser())
 
-
 //Registrera ny användare
 router.post('/', (req, res) => {
     bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
@@ -30,10 +29,7 @@ router.post('/', (req, res) => {
                     zip: req.body.zip,
                     city: req.body.city,
                 },
-                // orderHistory: [{
-                //     type: '',
-                //     ref: 'Order'
-                // }]
+                orderHistory: []
             })
   
             newUser.save((err) =>{
