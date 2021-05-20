@@ -12,9 +12,10 @@ router.use(cookieParser());
 require('dotenv').config()
 
 router.get('/api/orders', async (req, res) => {
-    console.log(req.cookies['auth-token']);
-    if (!req.cookies['auth-token']) {
+    // checking if not cookies from tokens then 204 status.
+    if (!req.cookie['auth-token']) {
         res.status(204).send("No Content - Bara för inloggade")
+        // else the rest is inside, which means only for logged in users.
     } else {
         const user = await User.findOne({ name: req.body.name })
 
@@ -24,7 +25,6 @@ router.get('/api/orders', async (req, res) => {
             } else {
                 if (user.role === 'admin') {
                     const orders = await Order.find();
-                    console.log(JSON.stringify(orders));
                     res.json(orders);
                 } else {
                     const user = await User.findOne({ name: req.body.name, password: req.body.password }, { orderHistory: 1 }).populate('orderHistory');
@@ -36,7 +36,7 @@ router.get('/api/orders', async (req, res) => {
 });
 
 router.post('/api/orders', async (req, res) => {
-    console.log(req.cookies);
+
     console.log(req.cookies['auth-token']);
     if (!req.cookies['auth-token']) {
         res.send("Bara för inloggade.")
@@ -62,9 +62,6 @@ router.post('/api/orders', async (req, res) => {
                 const result = await User.findByIdAndUpdate(user._id, { $push: { orderHistory: order._id } });
                 console.log(result)
 
-                if (result.updatedCount == 0) {
-                    // Didn't work
-                }
                 res.json(order);
 
             }
