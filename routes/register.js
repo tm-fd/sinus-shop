@@ -14,17 +14,15 @@ router.post('/', (req, res) => {
         res.json(err)
         else {
             const newUser = new User({
-                _id: new mongoose.Types.ObjectId(),
-                name: req.body.name,
                 email: req.body.email,
                 password: hash,
-                role: 'customer',
+                name: req.body.name,
+                role: 'admin',
                 adress: {
-                    street: req.body.street,
-                    zip: req.body.zip,
-                    city: req.body.city,
-                },
-                orderHistory: []
+                    street: req.body.adress.street,
+                    zip: req.body.adress.zip,
+                    city: req.body.adress.city
+                }
             })
   
             newUser.save((err) =>{
