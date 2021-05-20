@@ -21,10 +21,12 @@ const userSchema = new mongoose.Schema({
 
 userSchema.methods.generateAuthToken = function(){
     const payload = {
-        email: this.email,
-        name: this.name,
-        role: this.role,
-        address: this.address
+        user: {
+            email: this.email,
+            name: this.name,
+            role: this.role,
+            address: this.address
+        }
     }
     const token = jwt.sign(payload, process.env.SECRET);
     return token
