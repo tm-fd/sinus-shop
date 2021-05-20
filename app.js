@@ -1,7 +1,6 @@
 const express = require('express')
 const products = require('./routes/products');
 const auth = require('./controller/authController')
-const register = require('./routes/register')
 const mongoose = require('mongoose');
 const app = express()
 
@@ -23,6 +22,5 @@ app.use(express.urlencoded({ extended: true }));
  // Routes
 app.use('/api/products', products);
 app.use('/api/auth', auth);
-app.use('/api/register', register);
 
 module.exports = app
