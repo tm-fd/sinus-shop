@@ -4,7 +4,8 @@
   "description": "## Arbetssätt Git Flow Agilt och Trello",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon start.js"
   },
   "repository": {
     "type": "git",
@@ -18,8 +19,10 @@
   },
   "homepage": "https://github.com/zocom-david-lundholm/nackademin-slutprojekt-backend#readme",
   "dependencies": {
+    "dotenv": "^9.0.2",
     "express": "^4.17.1",
     "mongodb": "^3.6.7",
-    "mongoose": "^5.12.9"
+    "mongoose": "^5.12.9",
+    "nodemon": "^2.0.7"
   }
 }
