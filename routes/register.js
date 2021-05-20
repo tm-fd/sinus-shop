@@ -1,16 +1,11 @@
 const mongoose = require('mongoose')
 
 const router = require('express').Router()
-const User = require('../model/user')
+const User = require('../models/user')
 
 const bcrypt = require('bcrypt')
 const saltRounds = 10
 
-// const router = new Router()
-
-// require('dotenv').config()
-// app.use(express.urlencoded({ extended: true }))
-// app.use(cookieParser())
 
 //Registrera ny användare
 router.post('/', (req, res) => {
