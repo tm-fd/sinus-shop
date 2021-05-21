@@ -9,15 +9,14 @@ const saltRounds = 10
 
 //Registrera ny användare
 router.post('/', (req, res) => {
-    bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
-        if (err)
-        res.json(err)
+    bcrypt.hash(req.body.password, saltRounds, async (err, hash) => {
+        if (err) res.json(err)
         else {
             const newUser = new User({
                 email: req.body.email,
                 password: hash,
                 name: req.body.name,
-                role: 'admin',
+                role: 'customer',
                 adress: {
                     street: req.body.adress.street,
                     zip: req.body.adress.zip,
@@ -25,13 +24,9 @@ router.post('/', (req, res) => {
                 }
             })
   
-            newUser.save((err) =>{
-                if(err) {
-                    res.json(err)
-                }
-                else {
-                    res.json(newUser)
-                }
+            newUser = await newUser.save((err) => {
+                if(err) res.json(err)
+                else res.json(newUser)
             })
 
         }

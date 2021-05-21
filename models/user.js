@@ -4,17 +4,35 @@ require('dotenv').config()
 
 
 const userSchema = new mongoose.Schema({
-    email: String,
-    password: String,
+    email: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
     name: {
         type: String,
         required: true
     },
-    role: String,
+    role: {
+        type: String,
+        required: true
+    },
     adress: {
-        street: String,
-        zip: String,
-        city: String,
+        street: {
+            type: String,
+            required: true
+        },
+        zip: {
+            type: String,
+            required: true
+        },
+        city: {
+            type: String,
+            required: true
+        },
     },
     orderHistory: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -25,17 +43,18 @@ const userSchema = new mongoose.Schema({
 userSchema.methods.generateAuthToken = function(){
     const payload = {
         user: {
-            email: this.email,
-            name: this.name,
-            role: this.role,
+            email: this.email.type,
+            name: this.name.type,
+            role: this.role.type,
             adress: {
-                street: this.adress.street,
-                zip: this.adress.zip,
-                city: this.adress.city
+                street: this.adress.street.type,
+                zip: this.adress.zip.type,
+                city: this.adress.city.type
             }
         }
     }
     const token = jwt.sign(payload, process.env.SECRET);
+    console.log(token)
     return token
 }
 
