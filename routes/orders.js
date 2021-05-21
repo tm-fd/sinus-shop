@@ -42,13 +42,16 @@ router.post('/api/orders', async (req, res) => {
         res.send("Bara för inloggade.")
     } else {
         const user = await User.findOne({ name: req.body.name })
-        bcrypt.compare(req.body.password, user.password, async (err, result) => {
-            if (err) {
-                res.json(err)
+        bcrypt.compare(req.body.password, user.password, async result => {
+            if (!result) {
+                // Failed authentication 
             } else {
-
                 const user = await User.findOne({ name: req.body.name });
                 let items = req.body.items;
+                if(!items){
+                    res.status(404).send('finns inget');
+                    return;
+                }
                 const allProducts = await Product.find({ _id: { $in: items } });
                 let order = new Order({
                     timeStamp: Date.now(),
@@ -63,7 +66,6 @@ router.post('/api/orders', async (req, res) => {
                 console.log(result)
 
                 res.json(order);
-
             }
         })
     }
