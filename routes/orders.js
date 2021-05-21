@@ -2,68 +2,76 @@ const router = require('express').Router();
 const User = require('../models/user');
 const Order = require('../models/order');
 const Product = require('../models/product');
-//const mongoose = require('mongoose');
-//const jwt = require('jsonwebtoken')
 
-const bcrypt = require('bcrypt');
 const cookieParser = require('cookie-parser');
 router.use(cookieParser());
+const jwt = require('jsonwebtoken');
 
 require('dotenv').config()
 
 router.get('/api/orders', async (req, res) => {
-    // checking if not cookies from tokens then 204 status.
-    if (!req.cookie['auth-token']) {
-        res.status(204).send("No Content - Bara för inloggade")
-        // else the rest is inside, which means only for logged in users.
+    // kollar om det inte finns inloggad person.
+    if (!req.cookies['auth-token']) {
+        res.send("Bara för inloggade.")
     } else {
-        const user = await User.findOne({ name: req.body.name })
-
-        bcrypt.compare(req.body.password, user.password, async (err, result) => {
+        const token = req.cookies['auth-token'];
+        // verifierar token.
+        jwt.verify(token, process.env.SECRET, async (err, payload) => {
+            const user = await User.findOne({ name: payload.user.name })
             if (err) {
                 res.json(err)
             } else {
+                // ifall admin är inloggad då ser den alla ordrar. Om det är en kund så ser den bara själva beställingar personen gjort.
                 if (user.role === 'admin') {
                     const orders = await Order.find();
                     res.json(orders);
-                } else {
-                    const user = await User.findOne({ name: req.body.name, password: req.body.password }, { orderHistory: 1 }).populate('orderHistory');
+                } 
+                else if(user.role === 'kund') {
+                    const user = await User.findOne({ name: payload.user.name }, { orderHistory: 1 }).populate('orderHistory');
                     res.json(user.orderHistory);
                 }
             }
         })
+
     }
 });
 
 router.post('/api/orders', async (req, res) => {
 
-    console.log(req.cookies['auth-token']);
+    // kollar om det inte finns inloggad person.
     if (!req.cookies['auth-token']) {
         res.send("Bara för inloggade.")
     } else {
-        const user = await User.findOne({ name: req.body.name })
-        bcrypt.compare(req.body.password, user.password, async (err, result) => {
+        const token = req.cookies['auth-token'];
+
+        // verifierar token.
+        jwt.verify(token, process.env.SECRET, async (err, payload) => {
             if (err) {
                 res.json(err)
-            } else {
 
-                const user = await User.findOne({ name: req.body.name });
+
+            } else {
+                const user = await User.findOne({ name: payload.user.name })
                 let items = req.body.items;
+             
+                // kollar ifall det inte finns några varor i varukorgen, då skapas det inga ordrar.
+                (items === undefined || items === null || items.length === 0 ) ?  res.status(404).send('FEL') : res.status(200).send('BRA')
+
+                // den kollar i produkt modelen och checkar ifall rätt id till produkt matchar inne i items i order model.
                 const allProducts = await Product.find({ _id: { $in: items } });
+
                 let order = new Order({
                     timeStamp: Date.now(),
                     status: true,
                     items: items,
                     orderValue: allProducts.reduce((total, prod) => total + prod.price, 0)
                 });
-
+                // Skapar order och lägger till den i new Order.
                 await Order.create(order);
-
+                // den hittar rätt user med id och uppdaterar personens orderHistory.
                 const result = await User.findByIdAndUpdate(user._id, { $push: { orderHistory: order._id } });
-                console.log(result)
 
                 res.json(order);
-
             }
         })
     }

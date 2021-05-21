@@ -23,6 +23,7 @@
     "cookie-parser": "^1.4.5",
     "dotenv": "^9.0.2",
     "express": "^4.17.1",
+    "joi": "^17.4.0",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.7",
     "mongoose": "^5.12.9",
