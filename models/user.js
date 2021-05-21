@@ -4,14 +4,14 @@ require('dotenv').config()
 
 
 const userSchema = new mongoose.Schema({
+    email: String,
+    password: String,
     name: {
         type: String,
         required: true
     },
-    email: String,
-    password: String,
     role: String,
-    address: {
+    adress: {
         street: String,
         zip: String,
         city: String,
@@ -28,7 +28,11 @@ userSchema.methods.generateAuthToken = function(){
             email: this.email,
             name: this.name,
             role: this.role,
-            address: this.address
+            adress: {
+                street: this.adress.street,
+                zip: this.adress.zip,
+                city: this.adress.city
+            }
         }
     }
     const token = jwt.sign(payload, process.env.SECRET);
