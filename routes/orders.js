@@ -26,7 +26,7 @@ router.get('/api/orders', async (req, res) => {
                     const orders = await Order.find();
                     res.json(orders);
                 } 
-                else if(user.role === 'kund') {
+                else if(user.role === 'customer') {
                     const user = await User.findOne({ name: payload.user.name }, { orderHistory: 1 }).populate('orderHistory');
                     res.json(user.orderHistory);
                 }
@@ -55,19 +55,22 @@ router.post('/api/orders', async (req, res) => {
                 let items = req.body.items;
              
                 // kollar ifall det inte finns några varor i varukorgen, då skapas det inga ordrar.
-                (items === undefined || items === null || items.length === 0 ) ?  res.status(404).send('FEL') : res.status(200).send('BRA')
+                (items === undefined || items === null || items.length === 0 ) ?  res.status(404).send('FEL') : res.status(200)
 
-                // den kollar i produkt modelen och checkar ifall rätt id till produkt matchar inne i items i order model.
-                const allProducts = await Product.find({ _id: { $in: items } });
+                // den kollar i produkt modelen (Product) och checkar med hjälp av id  och sen returnerar bara produkter som matchar till de som valde user (items).
+            
+               const selectedProducts = await Product.find({ _id: { $in: items } });
+
 
                 let order = new Order({
                     timeStamp: Date.now(),
                     status: true,
                     items: items,
-                    orderValue: allProducts.reduce((total, prod) => total + prod.price, 0)
+                    orderValue: selectedProducts.reduce((total, prod) => total + prod.price,0)
                 });
                 // Skapar order och lägger till den i new Order.
                 await Order.create(order);
+            
                 // den hittar rätt user med id och uppdaterar personens orderHistory.
                 const result = await User.findByIdAndUpdate(user._id, { $push: { orderHistory: order._id } });
 
