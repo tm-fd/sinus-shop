@@ -8,8 +8,8 @@ const saltRounds = 10
 
 
 //Registrera ny användare
-router.post('/', (req, res) => {
-    bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
+router.post('/', async (req, res) => {
+    await bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
         if (err)
         res.json(err)
         else {

@@ -58,6 +58,7 @@ router.post('/api/orders', async (req, res) => {
                 (items === undefined || items === null || items.length === 0 ) ?  res.status(404).send('FEL') : res.status(200).send('BRA')
                 
                 // den kollar i produkt modelen och checkar ifall rätt id till produkt matchar inne i items i order model.
+<<<<<<< Updated upstream
                // let allProducts = await Product.find({ _id: { $in: items }});
 
                 ////////////////////////////////////////////////////////////////////
@@ -83,6 +84,10 @@ router.post('/api/orders', async (req, res) => {
                 const sumResult = await orderSum(req.body.items)
                 console.log(sumResult)
                 //////////////////////////////////////////////////////////////
+=======
+                const allProducts = await Product.find({ _id: { $in: items } });
+             
+>>>>>>> Stashed changes
 
                 let order = new Order({
                     timeStamp: Date.now(),
