@@ -17,7 +17,7 @@ router.post('/', (req, res) => {
                 email: req.body.email,
                 password: hash,
                 name: req.body.name,
-                role: 'admin',
+                role: req.body.role ? req.body.role : 'customer',
                 adress: {
                     street: req.body.adress.street,
                     zip: req.body.adress.zip,
