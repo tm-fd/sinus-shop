@@ -85,14 +85,17 @@ router.post('/api/orders', async (req, res) => {
                 console.log(sumResult)
                 //////////////////////////////////////////////////////////////  
 
+
                 let order = new Order({
                     timeStamp: Date.now(),
                     status: true,
                     items: items,
                     orderValue: sumResult
+
                 });
                 // Skapar order och lägger till den i new Order.
                 await Order.create(order);
+            
                 // den hittar rätt user med id och uppdaterar personens orderHistory.
                 const result = await User.findByIdAndUpdate(user._id, { $push: { orderHistory: order._id } });
 
