@@ -55,7 +55,7 @@ router.post('/api/orders', async (req, res) => {
                 let items = req.body.items;
                 
                 // kollar ifall det inte finns några varor i varukorgen, då skapas det inga ordrar.
-                (items === undefined || items === null || items.length === 0 ) ?  res.status(404).send('FEL') : res.status(200).send('BRA')
+                (items === undefined || items === null || items.length === 0 ) ?  res.status(404).send('FEL') : res.status(200)
                 
                 // den kollar i produkt modelen och checkar ifall rätt id till produkt matchar inne i items i order model.
                // let allProducts = await Product.find({ _id: { $in: items }});
