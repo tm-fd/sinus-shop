@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
+require('dotenv').config();
 
 // Imported Routes
 const products = require('./routes/products');
@@ -9,9 +10,10 @@ const users = require('./routes/register');
 const order = require('./routes/orders');
 
 // Connect to mongodb & listen for requests
-const dbURI = "mongodb+srv://Grin:projektgrin@grin.0ubep.mongodb.net/Grin_db?retryWrites=true&w=majority";
 
-mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true})
+//const dbURI = "mongodb+srv://Grin:projektgrin@grin.0ubep.mongodb.net/Grin_db?retryWrites=true&w=majority";
+
+mongoose.connect(process.env.MONGO_DB_URL, { useNewUrlParser: true, useUnifiedTopology: true})
   .catch(err => console.log(err));
 
 
