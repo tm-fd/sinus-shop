@@ -4,6 +4,7 @@ const { Mongoose } = require('mongoose');
 const router = new Router();
 const mongodb = require('mongodb')
 let ObjectId = mongodb.ObjectId
+
 const Product = require('../models/product');
 
 //Show all products
@@ -58,7 +59,6 @@ router.patch('/:id', async (req, res) => {
 
 
 //Delete a product based on id
-
 router.delete('/:id', (req, res) => {
     if(!ObjectId.isValid(req.params.id)){
         return res.send(`Error: Invalid product's ID`)
@@ -67,5 +67,7 @@ router.delete('/:id', (req, res) => {
         .then( (deletedProduct) => { res.send(deletedProduct) })        
     }
 });
+
+
 
 module.exports = router;
