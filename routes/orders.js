@@ -97,7 +97,7 @@ router.post('/api/orders', async (req, res) => {
                 await Order.create(order);
             
                 // den hittar rätt user med id och uppdaterar personens orderHistory.
-                await User.findByIdAndUpdate(user._id, { $push: { orderHistory: order._id } });
+                const result = await User.findByIdAndUpdate(user._id, { $push: { orderHistory: order._id } });
 
                // res.json(order);
             }
