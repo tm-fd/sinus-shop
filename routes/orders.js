@@ -31,7 +31,8 @@ router.post('/api/orders', authorizationMiddleware, async (req, res) => {
                 let items = req.body.items;
                 
                 // kollar ifall det inte finns några varor i varukorgen, då skapas det inga ordrar. /* End the flow by return */
-                if(items === undefined || items === null || items.length === 0 ) return res.status(404).send('Cart can not be empty')  
+                if(items === undefined || items === null || items.length === 0 ) return res.status(404).send('Cart can not be empty') 
+                
 
                 ////////////////////////////////////////////////////////////////////
                 // get price for each product in the order, then return sum
@@ -44,6 +45,8 @@ router.post('/api/orders', authorizationMiddleware, async (req, res) => {
                             for (let x = 0; x < productsArray.length; x++) {
                                 if (products[i]._id == productsArray[x]) {
                                     totalSum += products[i].price
+                                }else{
+                                    return res.status(404).send('Not a valid items') 
                                 }
                             }
                         }

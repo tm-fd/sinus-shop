@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
-function authorizationMiddleware(req, res, next){
+const authorizationMiddleware = async (req, res, next) => {
 
     const token = req.cookies['auth-token'];
     if(!token) return res.status(401).send('Access denied. No token')
