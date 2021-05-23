@@ -74,7 +74,8 @@ router.post('/api/orders', async (req, res) => {
                                 }
                             }
                         }
-                        return totalSum
+                       
+                       return totalSum
                     } catch (error) {
                         return error
                     }
