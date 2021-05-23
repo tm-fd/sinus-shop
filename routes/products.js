@@ -1,11 +1,8 @@
 const { Router } = require('express');
-const { Mongoose } = require('mongoose');
-
+const Product = require('../models/product');
 const router = new Router();
 const mongodb = require('mongodb')
 let ObjectId = mongodb.ObjectId
-
-const Product = require('../models/product');
 
 //Show all products
 router.get('/', async (req,res) => {
@@ -21,7 +18,7 @@ router.post('/', async (req,res) => {
         price: req.body.price,
         shortDesc: req.body.shortDesc,
         longDesc: req.body.longDesc,
-        imgFile: req.body.imgFile.type
+        imgFile: req.body.imgFile
     })
 
    product = await product.save( (err) => {
@@ -67,7 +64,5 @@ router.delete('/:id', (req, res) => {
         .then( (deletedProduct) => { res.send(deletedProduct) })        
     }
 });
-
-
 
 module.exports = router;
