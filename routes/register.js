@@ -17,7 +17,7 @@ router.post('/', async (req, res) => {
     if (!user) {
 
         //kryptera lösenordet
-        bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
+        await bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
             if (err)
                 res.json(err)
             else {
