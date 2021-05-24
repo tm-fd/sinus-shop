@@ -45,8 +45,6 @@ router.post('/api/orders', authorizationMiddleware, async (req, res) => {
                             for (let x = 0; x < productsArray.length; x++) {
                                 if (products[i]._id == productsArray[x]) {
                                     totalSum += products[i].price
-                                }else{
-                                    return res.status(404).send('Not a valid items') 
                                 }
                             }
                         }
@@ -55,7 +53,7 @@ router.post('/api/orders', authorizationMiddleware, async (req, res) => {
                             return error
                         }
                 }
-
+                console.log(items)
                 const sumResult = await orderSum(items)
                 console.log(sumResult)
                 //////////////////////////////////////////////////////////////  
@@ -66,13 +64,12 @@ router.post('/api/orders', authorizationMiddleware, async (req, res) => {
                     items: items,
                     orderValue: sumResult
                 });
-
-                if(user){
+                
                 // Skapar order och lägger till den i new Order.
                 await Order.create(order);
                 // den hittar rätt user med id och uppdaterar personens orderHistory.
                 await User.findByIdAndUpdate(user._id, { $push: { orderHistory: order._id } });
-                }
+                
                 /************/
                 /// sending response to client
                 res.status(200).send('The order has successfully added')
