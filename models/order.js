@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-const orderSchema = new mongoose.Schema({
-    timeStamp: Date.now(),
+const orderSchema = mongoose.Schema({
+    timeStamp: Date,
     status: Boolean,
     items: [  
         {
@@ -12,5 +12,8 @@ const orderSchema = new mongoose.Schema({
 });
 
 const Order = mongoose.model('Order', orderSchema);
+
+
+
 
 module.exports = Order;
