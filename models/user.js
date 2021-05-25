@@ -5,14 +5,35 @@ require('dotenv').config();
 
 // user model structure
 const userSchema = new mongoose.Schema({
-    name: String,
-    email: String,
-    password: String,
-    role: String,
-    address: {
-        street: String,
-        zip: String,
-        city: String,
+    name: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    role: {
+        type: String,
+        required: true
+    },
+    adress: {
+        street: {
+            type: String,
+            required: true
+        },
+        zip: {
+            type: String,
+            required: true
+        },
+        city: {
+            type: String,
+            required: true
+        }
     },
     orderHistory: [{
         type: mongoose.Schema.Types.ObjectId,
