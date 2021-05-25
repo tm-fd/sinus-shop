@@ -64,7 +64,7 @@ router.post('/api/orders', authorizationMiddleware, async (req, res) => {
 
     let order = new Order({
         timeStamp: Date.now(),
-        status: true,
+        status: req.body.status ? req.body.status : 'inProcess',
         items: items,
         orderValue: sumResult
     });
