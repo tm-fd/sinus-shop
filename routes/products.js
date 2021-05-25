@@ -1,8 +1,11 @@
 const { Router } = require('express');
+const authorizationMiddleware = require('../controller/authorization')
 const Product = require('../models/product');
 const router = new Router();
 const mongodb = require('mongodb')
 let ObjectId = mongodb.ObjectId
+const cookieParser = require('cookie-parser');
+router.use(cookieParser());
 
 //Show all products
 router.get('/', async (req,res) => {
@@ -12,7 +15,7 @@ router.get('/', async (req,res) => {
 
 
 //Post a new product
-router.post('/', async (req,res) => {
+router.post('/', authorizationMiddleware, async (req, res) => {
     let product = new Product({ 
         title: req.body.title,
         price: req.body.price,
@@ -20,12 +23,12 @@ router.post('/', async (req,res) => {
         longDesc: req.body.longDesc,
         imgFile: req.body.imgFile
     })
-
-   product = await product.save( (err) => {
+ 
+    await product.save( (err) => {
        if(err){
            res.send(err.message)
        }else{
-           res.send(product)           
+           res.status(200).send(product)           
        }
    })
 });
@@ -43,7 +46,7 @@ router.get('/:id', async (req,res) => {
 
 
 //Update a product based on id
-router.patch('/:id', async (req, res) => {
+router.patch('/:id', authorizationMiddleware, async (req, res) => {
     if(!ObjectId.isValid(req.params.id)){
         return res.send(`Error: Invalid product's ID`)
     }else{
@@ -56,7 +59,7 @@ router.patch('/:id', async (req, res) => {
 
 
 //Delete a product based on id
-router.delete('/:id', (req, res) => {
+router.delete('/:id', authorizationMiddleware, async (req, res) => {
     if(!ObjectId.isValid(req.params.id)){
         return res.send(`Error: Invalid product's ID`)
     }else{

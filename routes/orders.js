@@ -3,15 +3,13 @@ const router = require('express').Router();
 const User = require('../models/user');
 const Order = require('../models/order');
 const Product = require('../models/product');
- 
 const cookieParser = require('cookie-parser');
-router.use(cookieParser());
- 
 require('dotenv').config()
 
 
-
+router.use(cookieParser());
  
+
 router.get('/api/orders', authorizationMiddleware, async (req, res) => {
     
             const user = await User.findOne({ name: req.decodedToken.user.name })
