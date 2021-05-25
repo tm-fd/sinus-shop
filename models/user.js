@@ -4,8 +4,14 @@ require('dotenv').config()
 
 // user model structure
 const userSchema = new mongoose.Schema({
-    email: String,
-    password: String,
+    email: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
     name: {
         type: String,
         required: true
@@ -26,6 +32,7 @@ const userSchema = new mongoose.Schema({
 // generate user authentication token
 userSchema.methods.generateAuthToken = function(){
     const payload = {
+        exp: Math.floor(Date.now() / 1000) + (60 * 60),
         user: {
             email: this.email,
             name: this.name,

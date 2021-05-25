@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/user");
-const jwt = require('jsonwebtoken')
 const bcrypt = require("bcrypt");
-require('dotenv').config()
+
 
 
 router.post("/", async (req, res) => {
@@ -28,23 +27,7 @@ router.post("/", async (req, res) => {
         
   });
 
-// function authorizationMiddleware(req, res, next){
-
-//     const token = req.cookie('auth-token');
-//     if(!token) res.status(401).send('Access denied. No token')
-
-//     try{
-//         const decodedToken = jwt.verify('token', process.env.SECRETS);
-//         req.user = decodedToken;
-//         next();
-//     }
-//     catch(exp){
-//         res.status(400).send('Invalid token')
-//     }
-// }
-  
-
 
 
   module.exports = router
- // module.exports.authorizationMiddleware = authorizationMiddleware
+ 
