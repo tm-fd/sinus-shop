@@ -9,9 +9,10 @@ const auth = require('./controller/authController');
 const users = require('./routes/register');
 const order = require('./routes/orders');
 
+
 // Connect to mongodb & listen for requests
 mongoose.connect(process.env.MONGO_DB_URL, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false})
-  .catch(err => console.log(err));
+.catch(err => console.log(err));
 
 
 // Middleware

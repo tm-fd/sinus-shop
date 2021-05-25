@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
-/* const Joi = require('joi'); */
 
 require('dotenv').config();
 
@@ -24,6 +23,7 @@ const userSchema = new mongoose.Schema({
 // generate user authentication token
 userSchema.methods.generateAuthToken = function(){
     const payload = {
+        exp: Math.floor(Date.now() / 1000) + (60 * 60),
         user: {
             email: this.email,
             name: this.name,
