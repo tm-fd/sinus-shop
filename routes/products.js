@@ -1,4 +1,3 @@
-  
 const authorizationMiddleware = require('../controller/authorization')
 const { Router } = require('express');
 const Product = require('../models/product');
@@ -21,7 +20,7 @@ router.get('/', async (req,res) => {
 //Post a new product
 router.post('/', authorizationMiddleware, async (req,res) => {
 
-    const user = await User.findOne({ name: req.decodedToken.user.role })
+    const user = await User.findOne({ name: req.decodedToken.user.name })
 
     if( user.role === 'admin'){
 
@@ -33,7 +32,7 @@ router.post('/', authorizationMiddleware, async (req,res) => {
             imgFile: req.body.imgFile
         })
     
-        product = await product.save( (err) => {
+        await product.save( (err) => {
             if(err){
                 res.send(err.message)
             }else{
@@ -41,12 +40,9 @@ router.post('/', authorizationMiddleware, async (req,res) => {
             }
         })
 
-    }else if( user.role === 'costomer'){
+    }else if( user.role === 'customer'){
         res.send('Only admin can makes changes')
     }
-
-    
-
 
 });
 
@@ -63,26 +59,45 @@ router.get('/:id', async (req,res) => {
 
 
 //Update a product based on id
-router.patch('/:id', async (req, res) => {
-    if(!ObjectId.isValid(req.params.id)){
-        return res.send(`Error: Invalid product's ID`)
-    }else{
-        const patchedProduct = await Product.findByIdAndUpdate( req.params.id, req.body, {
-            new: true
-        })
-        res.send(patchedProduct)        
+router.patch('/:id', authorizationMiddleware,async (req, res) => {
+
+    const user = await User.findOne({ name: req.decodedToken.user.name })
+
+    if( user.role === 'admin'){
+
+        if(!ObjectId.isValid(req.params.id)){
+            return res.send(`Error: Invalid product's ID`)
+        }else{
+            const patchedProduct = await Product.findByIdAndUpdate( req.params.id, req.body, {
+                new: true
+            })
+            res.send(patchedProduct)        
+        }
+
+    }else if( user.role === 'customer'){
+        res.send('Only admin can makes changes')
     }
 });
 
 
 //Delete a product based on id
-router.delete('/:id', (req, res) => {
-    if(!ObjectId.isValid(req.params.id)){
-        return res.send(`Error: Invalid product's ID`)
-    }else{
-        Product.findByIdAndRemove({_id: req.params.id})
-        .then( (deletedProduct) => { res.send(deletedProduct) })        
+router.delete('/:id', authorizationMiddleware, (req, res) => {
+
+    const user = User.findOne({ name: req.decodedToken.user.name })
+
+    if( user.role === 'admin'){
+
+        if(!ObjectId.isValid(req.params.id)){
+            return res.send(`Error: Invalid product's ID`)
+        }else{
+            Product.findByIdAndRemove({_id: req.params.id})
+            .then( (deletedProduct) => { res.send(deletedProduct) })        
+        }
+
+    }else if( user.role === 'customer'){
+        res.send('Only admin can makes changes')
     }
+
 });
 
 module.exports = router;
