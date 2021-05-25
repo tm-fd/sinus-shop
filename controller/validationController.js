@@ -22,11 +22,11 @@ module.exports.JoiValidateUser = JoiValidateUser;
 function JoiValidateProduct(obj) {
     
     const schema = Joi.object({
-        title: Joi.string().required().trim(),
-        price: Joi.number().required().trim(),
-        shortDesc: Joi.string().required().trim(),
-        longDesc: Joi.string().required().trim(),
-        imgFile: Joi.string().required()
+        title: Joi.string().required(),
+        price: Joi.number().required(),
+        shortDesc: Joi.string().required(),
+        longDesc: Joi.string().required(),
+        imgFile: Joi.string().required().regex(/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i).trim()
     })
     return schema.validate(obj);
 }
