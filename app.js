@@ -12,7 +12,8 @@ app.use( express.static('public') )
 // connect to mongodb & listen for requests
 const dbURI = "mongodb+srv://Grin:projektgrin@grin.0ubep.mongodb.net/Grin_db?retryWrites=true&w=majority";
 
-mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
+
+mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true})
   .catch(err => console.log(err));
 
 
