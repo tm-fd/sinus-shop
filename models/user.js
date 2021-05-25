@@ -1,23 +1,15 @@
 const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken')
-require('dotenv').config()
+const jwt = require('jsonwebtoken');
+
+require('dotenv').config();
 
 // user model structure
 const userSchema = new mongoose.Schema({
-    email: {
-        type: String,
-        required: true
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    name: {
-        type: String,
-        required: true
-    },
+    name: String,
+    email: String,
+    password: String,
     role: String,
-    adress: {
+    address: {
         street: String,
         zip: String,
         city: String,
@@ -28,7 +20,6 @@ const userSchema = new mongoose.Schema({
     }]
 });
 
-
 // generate user authentication token
 userSchema.methods.generateAuthToken = function(){
     const payload = {
@@ -37,11 +28,7 @@ userSchema.methods.generateAuthToken = function(){
             email: this.email,
             name: this.name,
             role: this.role,
-            adress: {
-                street: this.adress.street,
-                zip: this.adress.zip,
-                city: this.adress.city
-            }
+            address: this.address
         }
     }
     const token = jwt.sign(payload, process.env.SECRET);

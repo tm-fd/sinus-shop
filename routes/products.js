@@ -1,6 +1,7 @@
 const authorizationMiddleware = require('../controller/authorization')
 const { Router } = require('express');
 const Product = require('../models/product');
+const { JoiValidateProduct } = require('../controller/validationController')
 const User = require('../models/user');
 const router = new Router();
 const mongodb = require('mongodb')
@@ -43,7 +44,6 @@ router.post('/', authorizationMiddleware, async (req,res) => {
     }else if( user.role === 'customer'){
         res.send('Only admin can makes changes')
     }
-
 });
 
 
