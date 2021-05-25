@@ -25,6 +25,7 @@ function JoiValidateProduct(obj) {
         title: Joi.string().required(),
         price: Joi.number().required(),
         shortDesc: Joi.string().required(),
+        serial: Joi.any(),
         longDesc: Joi.string().required(),
         imgFile: Joi.string().required().regex(/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i).trim()
     })
