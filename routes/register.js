@@ -1,16 +1,23 @@
-const router = require('express').Router()
-const User = require('../models/user')
+const router = require('express').Router();
+const User = require('../models/user');
+const { JoiValidateUser } = require('../controller/validationController');
 
-const bcrypt = require('bcrypt')
-const saltRounds = 10
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+
 
 
 //Registrera ny användare
 router.post('/', async (req, res) => {
-    // Check if the user's email is already exists in database
-    const email = await User.exists({ email: req.body.email});
 
-    if(!email) {
+//Checks the validation from user model with Joi middleware from the validationController.js
+const { error } =  JoiValidateUser(req.body);
+if (error) return res.status(400).send(error.details[0].message);
+
+// Check if the user's email is already exists in database
+const email = await User.exists({ email: req.body.email});
+
+if(!email) {
 
     await bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
         if (err)
@@ -26,8 +33,8 @@ router.post('/', async (req, res) => {
                     zip: req.body.adress.zip,
                     city: req.body.adress.city
                 }
-            })
-  
+            });
+            
             newUser.save((err) =>{
                 if(err) {
                     res.json(err)

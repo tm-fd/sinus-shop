@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
-const Joi = require('joi');
+/* const Joi = require('joi'); */
+
 require('dotenv').config();
 
 // user model structure
@@ -19,7 +20,6 @@ const userSchema = new mongoose.Schema({
         ref: 'Order'
     }]
 });
-
 
 // generate user authentication token
 userSchema.methods.generateAuthToken = function(){

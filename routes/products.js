@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const Product = require('../models/product');
+const { JoiValidateProduct } = require('../controller/validationController')
 const router = new Router();
 const mongodb = require('mongodb')
 let ObjectId = mongodb.ObjectId
@@ -21,13 +22,10 @@ router.post('/', async (req,res) => {
         imgFile: req.body.imgFile
     })
 
-   product = await product.save( (err) => {
-       if(err){
-           res.send(err.message)
-       }else{
-           res.send(product)           
-       }
-   })
+    product = await product.save( (err) => {
+       if(err) res.send(err.message)
+       else res.send(product)           
+    })
 });
 
 
