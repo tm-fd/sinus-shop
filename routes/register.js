@@ -1,56 +1,58 @@
-const router = require('express').Router();
-const User = require('../models/user');
-const { JoiValidateUser } = require('../controller/validationController');
+const router = require('express').Router()
+const User = require('../models/user')
 
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
-
+const bcrypt = require('bcrypt')
+const saltRounds = 10
 
 
 //Registrera ny användare
 router.post('/', async (req, res) => {
 
-//Checks the validation from user model with Joi middleware from the validationController.js
-const { error } =  JoiValidateUser(req.body);
-if (error) return res.status(400).send(error.details[0].message);
 
-// Check if the user's email is already exists in database
-const email = await User.exists({ email: req.body.email});
+    //Kollar om email finns i user collection
+    const email = await User.findOne({ email: req.body.email })    
 
-if(!email) {
+    //Om inmatad email inte finns gör nedan: skapa ny användare
+    if (!email) {
 
-    await bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
-        if (err)
-        res.json(err)
-        else {
-            const newUser = new User({
-                email: req.body.email,
-                password: hash,
-                name: req.body.name,
-                role: req.body.role ? req.body.role : 'customer',
-                adress: {
-                    street: req.body.adress.street,
-                    zip: req.body.adress.zip,
-                    city: req.body.adress.city
-                }
-            });
-            
-            newUser.save((err) =>{
-                if(err) {
-                    res.json(err)
-                }
-                else {
-                    res.json(newUser)
-                }
-            })
+        //kryptera lösenordet
+        await bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
+            if (err)
+                res.json(err)
+            else {
 
-        }
-    })
-}
-else {
-    // if email already exists, return error
-   return res.status(400).send({ error: 'Email already exists' })
-}
+                //skapa en ny användare enligt model
+                const newUser = new User({
+                    name: req.body.name,
+                    email: req.body.email,
+                    password: hash,
+                    role: req.body.role ? req.body.role : 'customer',
+                    adress: {
+                        street: req.body.street,
+                        zip: req.body.zip,
+                        city: req.body.city,
+                    },
+                    orderHistory: []
+                })
+
+                //spara användaren
+                newUser.save((err) => {
+                    if (err) {
+                        console.error(err)
+                    }
+                    else {
+                        // res.json(newUser) 
+                        return res.status(400).send(`New user registered: ${req.body.email}`)
+                    }
+                })
+
+            } 
+        })
+    }  else {
+        //Annars kör denna: emailadressen finns redan registrerad
+        return res.status(400).send(`${req.body.email} is already registered`)
+    }
+
 })
 
 
