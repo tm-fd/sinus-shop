@@ -8,6 +8,9 @@ const cookieParser = require('cookie-parser');
 router.use(cookieParser());
  
 require('dotenv').config()
+
+
+
  
 router.get('/api/orders', authorizationMiddleware, async (req, res) => {
     
@@ -29,9 +32,13 @@ router.post('/api/orders', authorizationMiddleware, async (req, res) => {
     const user = await User.findOne({ name: req.decodedToken.user.name})
     let items = req.body.items;
     
+    if (typeof(items) === "string") {
+        items = items.split(" ")
+    }
+
     // kollar ifall det inte finns några varor i varukorgen, då skapas det inga ordrar. /* End the flow by return */
     if(items === undefined || items === null || items.length === 0 ) return res.status(404).send('Cart can not be empty') 
-    if(user.role !== 'customer' || user.role !== 'admin') return res.status(404).send('Only registerd user can make order') 
+ 
 
     ////////////////////////////////////////////////////////////////////
     // get price for each product in the order, then return sum
