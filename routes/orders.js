@@ -39,7 +39,7 @@ router.post('/api/orders', authorizationMiddleware, async (req, res) => {
                 async function orderSum(productsArray) {
                     let totalSum = 0;
                     try {
-                        // find matching products by comparing all products and pruducts in the order 
+                        // find matching products by comparing all products and products in the order 
                         let products = await Product.find();
                         for (let i = 0; i < products.length; i++) {
                             for (let x = 0; x < productsArray.length; x++) {
