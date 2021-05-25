@@ -13,7 +13,7 @@ app.use( express.static('public') )
 const dbURI = "mongodb+srv://Grin:projektgrin@grin.0ubep.mongodb.net/Grin_db?retryWrites=true&w=majority";
 
 
-mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false})
   .catch(err => console.log(err));
 
 

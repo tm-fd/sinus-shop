@@ -81,17 +81,25 @@ router.patch('/:id', authorizationMiddleware,async (req, res) => {
 
 
 //Delete a product based on id
-router.delete('/:id', authorizationMiddleware, (req, res) => {
+router.delete('/:id', authorizationMiddleware, async (req, res) => {
 
-    const user = User.findOne({ name: req.decodedToken.user.name })
+    const user = await User.findOne({ name: req.decodedToken.user.name })
 
     if( user.role === 'admin'){
 
         if(!ObjectId.isValid(req.params.id)){
             return res.send(`Error: Invalid product's ID`)
         }else{
-            Product.findByIdAndRemove({_id: req.params.id})
-            .then( (deletedProduct) => { res.send(deletedProduct) })        
+            // Product.findByIdAndRemove({_id: req.params.id})
+            // .then( (deletedProduct) => { res.send(deletedProduct) })        
+            const deletedProduct = await Product.findByIdAndRemove( {_id: req.params.id}, (err, doc) => {
+                if(err){
+                    return res.send({ error: "Something failed!" });
+                }else{
+                    res.json(doc)
+                }
+            })
+            res.send(deletedProduct)
         }
 
     }else if( user.role === 'customer'){
