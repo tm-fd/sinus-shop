@@ -90,16 +90,14 @@ router.delete('/:id', authorizationMiddleware, async (req, res) => {
         if(!ObjectId.isValid(req.params.id)){
             return res.send(`Error: Invalid product's ID`)
         }else{
-            // Product.findByIdAndRemove({_id: req.params.id})
-            // .then( (deletedProduct) => { res.send(deletedProduct) })        
-            const deletedProduct = await Product.findByIdAndRemove( {_id: req.params.id}, (err, doc) => {
+
+            await Product.findByIdAndRemove( {_id: req.params.id}, (err, doc) => {
                 if(err){
-                    return res.send({ error: "Something failed!" });
+                    res.send({ error: "Something failed!" });
                 }else{
-                    res.json(doc)
+                    res.send(doc)
                 }
             })
-            res.send(deletedProduct)
         }
 
     }else if( user.role === 'customer'){
