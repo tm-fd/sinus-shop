@@ -96,9 +96,6 @@ router.patch('/:id', authorizationMiddleware,async (req, res) => {
 //Delete a product based on id
 router.delete('/:id', authorizationMiddleware, async (req, res) => {
 
-    const { error } =  JoiValidateProduct(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
-
     const user = await User.findOne({ role: req.decodedToken.user.role })
 
     if( user.role === 'admin'){
