@@ -20,7 +20,7 @@ router.get('/', async (req,res) => {
 //Post a new product
 router.post('/', authorizationMiddleware, async (req,res) => {
 
-    const user = await User.findOne({ name: req.decodedToken.user.name })
+    const user = await User.findOne({ role: req.decodedToken.user.role })
 
     if( user.role === 'admin'){
 
@@ -61,7 +61,7 @@ router.get('/:id', async (req,res) => {
 //Update a product based on id
 router.patch('/:id', authorizationMiddleware,async (req, res) => {
 
-    const user = await User.findOne({ name: req.decodedToken.user.name })
+    const user = await User.findOne({ role: req.decodedToken.user.role })
 
     if( user.role === 'admin'){
 
@@ -83,7 +83,7 @@ router.patch('/:id', authorizationMiddleware,async (req, res) => {
 //Delete a product based on id
 router.delete('/:id', authorizationMiddleware, async (req, res) => {
 
-    const user = await User.findOne({ name: req.decodedToken.user.name })
+    const user = await User.findOne({ role: req.decodedToken.user.role })
 
     if( user.role === 'admin'){
 
@@ -95,6 +95,7 @@ router.delete('/:id', authorizationMiddleware, async (req, res) => {
                 if(err){
                     res.send({ error: "Something failed!" });
                 }else{
+                    console.log(doc)
                     res.send(doc)
                 }
             })
