@@ -47,7 +47,7 @@ router.post('/', async (req, res) => {
                     }
                     else {
                         // res.json(newUser) 
-                        return res.status(400).send(`New user registered: ${req.body.email}`)
+                        return res.status(200).send(`New user registered: ${req.body.email}`)
                     }
                 })
 

@@ -6,6 +6,7 @@ function JoiValidateUser(obj) {
         name: Joi.string().required(),
         email: Joi.string().email().required().trim(),
         password: Joi.string().required().min(6).max(80).alphanum().trim(),
+        repeatPassword: Joi.any(),
         adress: {
             street: Joi.string().required(),
             zip: Joi.string().required(),
