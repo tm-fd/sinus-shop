@@ -6,6 +6,7 @@ function JoiValidateUser(obj) {
         name: Joi.string().required(),
         email: Joi.string().email().required().trim(),
         password: Joi.string().required().min(6).max(80).alphanum().trim(),
+        repeatPassword: Joi.any(),
         adress: {
             street: Joi.string().required(),
             zip: Joi.string().required(),
@@ -22,11 +23,12 @@ module.exports.JoiValidateUser = JoiValidateUser;
 function JoiValidateProduct(obj) {
     
     const schema = Joi.object({
-        title: Joi.string().required().trim(),
-        price: Joi.number().required().trim(),
-        shortDesc: Joi.string().required().trim(),
-        longDesc: Joi.string().required().trim(),
-        imgFile: Joi.string().required()
+        title: Joi.string().required(),
+        price: Joi.number().required(),
+        shortDesc: Joi.string().required(),
+        serial: Joi.any(),
+        longDesc: Joi.string().required(),
+        imgFile: Joi.string().required().regex(/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i).trim()
     })
     return schema.validate(obj);
 }
