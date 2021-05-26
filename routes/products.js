@@ -108,6 +108,7 @@ router.delete('/:id', authorizationMiddleware, async (req, res) => {
                 if(err){
                     res.send({ error: "Something failed!" });
                 }else{
+                    console.log(doc)
                     res.send(doc)
                 }
             })
