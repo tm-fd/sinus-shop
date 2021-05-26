@@ -33,9 +33,9 @@ router.post('/', async (req, res) => {
                     password: hash,
                     role: req.body.role ? req.body.role : 'customer',
                     adress: {
-                        street: req.body.street,
-                        zip: req.body.zip,
-                        city: req.body.city,
+                        street: req.body.adress.street,
+                        zip: req.body.adress.zip,
+                        city: req.body.adress.city,
                     },
                     orderHistory: []
                 })
@@ -47,7 +47,7 @@ router.post('/', async (req, res) => {
                     }
                     else {
                         // res.json(newUser) 
-                        return res.status(400).send(`New user registered: ${req.body.email}`)
+                        return res.status(200).send(`New user registered: ${req.body.email}`)
                     }
                 })
 

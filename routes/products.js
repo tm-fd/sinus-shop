@@ -13,15 +13,25 @@ router.use(cookieParser());
 
 //Show all products
 router.get('/', async (req,res) => {
-    const products = await Product.find({})
-    res.send(products)
+    
+        const products = await Product.find({})
+        if (products) {
+            res.status(200).send(products)
+        } else {
+            res.status(401).send("Bad request")
+        }
+        
+   
 });
 
 
 //Post a new product
 router.post('/', authorizationMiddleware, async (req,res) => {
 
-    const user = await User.findOne({ name: req.decodedToken.user.name })
+    const { error } =  JoiValidateProduct(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    const user = await User.findOne({ role: req.decodedToken.user.role })
 
     if( user.role === 'admin'){
 
@@ -61,7 +71,10 @@ router.get('/:id', async (req,res) => {
 //Update a product based on id
 router.patch('/:id', authorizationMiddleware,async (req, res) => {
 
-    const user = await User.findOne({ name: req.decodedToken.user.name })
+    const { error } =  JoiValidateProduct(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    const user = await User.findOne({ role: req.decodedToken.user.role })
 
     if( user.role === 'admin'){
 
@@ -83,7 +96,7 @@ router.patch('/:id', authorizationMiddleware,async (req, res) => {
 //Delete a product based on id
 router.delete('/:id', authorizationMiddleware, async (req, res) => {
 
-    const user = await User.findOne({ name: req.decodedToken.user.name })
+    const user = await User.findOne({ role: req.decodedToken.user.role })
 
     if( user.role === 'admin'){
 
