@@ -35,6 +35,7 @@ router.post('/', async (req, res) => {
                     if (err) {
                         console.error(err)
                     }
+
                     else {
                         const token = user.generateAuthToken();
                         res.cookie('auth-token', token)
