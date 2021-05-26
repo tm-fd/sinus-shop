@@ -45,9 +45,8 @@ router.post('/', async (req, res) => {
                     if (err) {
                         console.error(err)
                     }
-                    else {
-                        // res.json(newUser) 
-                        return res.status(200).send(`New user registered: ${req.body.email}`)
+                    else { 
+                        return res.status(201).json(newUser).send(`New user registered: ${req.body.email}`)
                     }
                 })
 
@@ -55,7 +54,7 @@ router.post('/', async (req, res) => {
         })
     }  else {
         //Annars kör denna: emailadressen finns redan registrerad
-        return res.status(400).send(`${req.body.email} is already registered`)
+        return res.status(409).send(`${req.body.email} is already registered`)
     }
 });
 
