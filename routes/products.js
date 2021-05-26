@@ -1,15 +1,21 @@
-const authorizationMiddleware = require('../controller/authorization')
 const { Router } = require('express');
-const Product = require('../models/product');
-const { JoiValidateProduct } = require('../controller/validationController')
-const User = require('../models/user');
 const router = new Router();
-const mongodb = require('mongodb')
-let ObjectId = mongodb.ObjectId
-const cookieParser = require('cookie-parser');
-require('dotenv').config()
 
+const { JoiValidateProduct } = require('../controller/validationController');
+const authorizationMiddleware = require('../controller/authorization');
+
+const Product = require('../models/product');
+const User = require('../models/user');
+
+const mongodb = require('mongodb');
+let ObjectId = mongodb.ObjectId;
+
+const cookieParser = require('cookie-parser');
 router.use(cookieParser());
+
+require('dotenv').config();
+
+
 
 //Show all products
 router.get('/', async (req,res) => {
