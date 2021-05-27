@@ -69,12 +69,12 @@ router.post('/api/orders', authorizationMiddleware, async (req, res) => {
         orderValue: sumResult
     });
 
-  //  if(user){
+
     // Skapar order och lägger till den i new Order.
     await Order.create(order);
     // den hittar rätt user med id och uppdaterar personens orderHistory.
     await User.findByIdAndUpdate(user._id, { $push: { orderHistory: order._id } });
-  //  }
+ 
     /************/
     /// sending response to client
     res.status(200).send('The order has successfully added')
