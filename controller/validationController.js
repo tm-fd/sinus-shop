@@ -1,5 +1,11 @@
 const Joi = require('joi');
- 
+
+// Some examples: .string() = makes sure it's a string that's returned, even if a number is inserted a string value will be returned
+//                .email() = makes sure the user has entered a email
+//                .required() = makes sure the value is not empty
+//                .alphanum() = makes sure the value only contains (a-z, A-Z) & (0-9) characters
+
+// Function that validates the schema object from the users input with Joi middleware, in this case the user object
 function JoiValidateUser(obj) {
     
     const schema = Joi.object({
@@ -13,13 +19,14 @@ function JoiValidateUser(obj) {
             city: Joi.string().required()
         }
     })
+    // returns the schema and validates whatever obj we put in
     return schema.validate(obj);
 }
-
+// Exports the function by name of function
 module.exports.JoiValidateUser = JoiValidateUser;
 
 
-
+// Function that validates the schema object from the users input with Joi middleware, in this case the product object
 function JoiValidateProduct(obj) {
     
     const schema = Joi.object({
