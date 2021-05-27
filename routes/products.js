@@ -17,28 +17,30 @@ require('dotenv').config();
 
 
 
-//Show all products
+// Visa alla produkter till användaren oavsett om hen är inloggad eller inte
 router.get('/', async (req,res) => {
     
-        const products = await Product.find({})
-        if (products) {
-            res.status(200).send(products)
-        } else {
-            res.status(401).send("Bad request")
-        }
+    // Här skapar vi en variabel som letar efter alla produkter som finns i vår databas och sedan skickar dem
+    const products = await Product.find({})
+    if (products) {
+        res.status(200).send(products)
+    } else {
+        res.status(401).send("Bad request")
+    }
         
-   
 });
 
 
 //Post a new product
-router.post('/', authorizationMiddleware, async (req,res) => {
+router.post('/', authorizationMiddleware, async (req,res) => { // authorizationMiddleware kontrolleras om token är stämmer, annars visa upp ett error meddelande
 
     const { error } =  JoiValidateProduct(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
+    // Här skapar vi en variabel som letar efter om användaren har loggat in som admin eller som customer
     const user = await User.findOne({ role: req.decodedToken.user.role })
 
+    // Vi kontrollerar ifall man loggat in som admin, så ska hen kunna skapa en ny produkt och spara en i vår databasen, annars kommer ett meddelande att dyka upp som säger att ( 'Only admin can makes changes')
     if( user.role === 'admin'){
 
         let product = new Product({ 
@@ -65,6 +67,8 @@ router.post('/', authorizationMiddleware, async (req,res) => {
 
 //Show product by id
 router.get('/:id', async (req,res) => {
+
+    // Ifall man skrev ett fel ID av produkten så kommer att visa upp ett meddelande som säger ('No such product found')
     if(!ObjectId.isValid(req.params.id)){
         return res.send('No such product found')
     }else{
@@ -82,8 +86,10 @@ router.patch('/:id', authorizationMiddleware,async (req, res) => {
 
     const user = await User.findOne({ role: req.decodedToken.user.role })
 
+    // Vi kontrollerar ifall man loggat in som admin, så ska hen kunna uppdatera en produkt baserat på ID, annars kommer ett meddelande att visa upp som säger att ('Only admin can makes changes')
     if( user.role === 'admin'){
 
+        // Ifall man skrev ett fel ID av produkten så kommer att visa upp ett meddelande som säger (`Error: Invalid product's ID`)
         if(!ObjectId.isValid(req.params.id)){
             return res.send(`Error: Invalid product's ID`)
         }else{
@@ -104,8 +110,10 @@ router.delete('/:id', authorizationMiddleware, async (req, res) => {
 
     const user = await User.findOne({ role: req.decodedToken.user.role })
 
+    // Vi kontrollerar ifall man loggat in som admin, så ska hen kunna radera en produkt baserat på ID, annars kommer ett meddelande att visa upp som säger att ('Only admin can makes changes')
     if( user.role === 'admin'){
 
+        // Ifall man skrev ett fel ID av produkten så kommer att visa upp ett meddelande som säger (`Error: Invalid product's ID`)
         if(!ObjectId.isValid(req.params.id)){
             return res.send(`Error: Invalid product's ID`)
         }else{
