@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt')
 const saltRounds = 10
 //Registrera ny användare
 router.post('/', async (req, res) => {
+  
     //Lägger till funktionen för Joi som tar in den request som kommer från 
     // användaren och stämmer av de kriterier som lagts i funktionen. Om det är något 
     // som inte stämmer skickas ett meddelande från details som 
