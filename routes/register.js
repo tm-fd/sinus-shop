@@ -5,8 +5,12 @@ const bcrypt = require('bcrypt')
 const saltRounds = 10
 //Registrera ny användare
 router.post('/', async (req, res) => {
-    // const { error } =  JoiValidateUser(req.body);
-    // if (error) return res.status(400).send(error.details[0].message);
+    //Lägger till funktionen för Joi som tar in den request som kommer från 
+    // användaren och stämmer av de kriterier som lagts i funktionen. Om det är något 
+    // som inte stämmer skickas ett meddelande från details som 
+    // förklarar vad som inte stämmer
+    const { error } =  JoiValidateUser(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
 
     //Kollar om email finns i user collection
     const email = await User.findOne({ email: req.body.email })    
@@ -17,7 +21,7 @@ router.post('/', async (req, res) => {
             if (err)
                 res.json(err)
             else {
-                //skapa en ny användare enligt model
+                //skapa en ny användare enligt model user.js
                 const user = new User({
                     name: req.body.name,
                     email: req.body.email,
@@ -34,12 +38,11 @@ router.post('/', async (req, res) => {
                 user.save((err) => {
                     if (err) {
                         console.error(err)
-                    }
-
-                    else {
+                    } else {
+                        //Skapar och signar en token för user genom att kalla på metoden generateAuthToken()
                         const token = user.generateAuthToken();
+                        //Namnger värdet på cookie
                         res.cookie('auth-token', token)
-                        // res.json(newUser) 
                         return res.status(200).json({user, token: token})
                     }
                 })
@@ -50,4 +53,5 @@ router.post('/', async (req, res) => {
         return res.status(409).send(`${req.body.email} is already registered`)
     }
 })
+
 module.exports = router;
