@@ -33,7 +33,11 @@ router.get('/', async (req,res) => {
 
 //Post a new product
 router.post('/', authorizationMiddleware, async (req,res) => { // authorizationMiddleware kontrolleras om token är stämmer, annars visa upp ett error meddelande
-
+    
+    /* Lägger till funktionen för Joi som tar in den request som kommer från 
+    användaren och stämmer av de kriterier som lagts i funktionen. Om det är något 
+    som inte stämmer skickas ett meddelande från details som 
+    förklarar vad som inte stämmer */
     const { error } =  JoiValidateProduct(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
