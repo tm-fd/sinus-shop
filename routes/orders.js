@@ -12,14 +12,14 @@ router.use(cookieParser());
 
 router.get('/api/orders', authorizationMiddleware, async (req, res) => {
     
-            const user = await User.findOne({ name: req.decodedToken.user.name })
+            const user = await User.findOne({ email: req.decodedToken.user.email })
                 // ifall admin är inloggad då ser den alla ordrar. Om det är en kund så ser den bara själva beställingar personen gjort.
                 if (user.role === 'admin') {
                     const orders = await Order.find();
                     res.json(orders);
                 } 
                 else if(user.role === 'customer') {
-                    const user = await User.findOne({ name: req.decodedToken.user.name}, { orderHistory: 1 }).populate('orderHistory');
+                    const user = await User.findOne({ email: req.decodedToken.user.email}, { orderHistory: 1 }).populate('orderHistory');
                     res.json(user.orderHistory);
                 }
             
@@ -27,7 +27,7 @@ router.get('/api/orders', authorizationMiddleware, async (req, res) => {
 });
 router.post('/api/orders', authorizationMiddleware, async (req, res) => {
         
-    const user = await User.findOne({ name: req.decodedToken.user.name})
+    const user = await User.findOne({ email: req.decodedToken.user.email})
     let items = req.body.items;
     
     if (typeof(items) === "string") {
