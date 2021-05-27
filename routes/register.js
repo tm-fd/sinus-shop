@@ -5,8 +5,8 @@ const bcrypt = require('bcrypt')
 const saltRounds = 10
 //Registrera ny användare
 router.post('/', async (req, res) => {
-    // const { error } =  JoiValidateUser(req.body);
-    // if (error) return res.status(400).send(error.details[0].message);
+    const { error } =  JoiValidateUser(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
 
     //Kollar om email finns i user collection
     const email = await User.findOne({ email: req.body.email })    
